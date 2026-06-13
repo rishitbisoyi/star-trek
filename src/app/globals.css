@@ -2,3 +2,376 @@
 @tailwind components;
 @tailwind utilities;
 @import "leaflet/dist/leaflet.css";
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap');
+
+/* ─── DESIGN TOKENS ─────────────────────────────────── */
+:root {
+  --bg:        #050816;
+  --panel:     #0b1020;
+  --panel2:    #10182d;
+  --border:    rgba(0, 255, 136, 0.18);
+  --border-dim:rgba(0, 255, 136, 0.08);
+
+  --green:  #00ff88;
+  --amber:  #ffb000;
+  --cyan:   #00d9ff;
+  --red:    #ff4d4d;
+
+  --glow-green: 0 0 8px #00ff88, 0 0 20px rgba(0,255,136,0.3);
+  --glow-amber: 0 0 8px #ffb000, 0 0 20px rgba(255,176,0,0.3);
+  --glow-cyan:  0 0 8px #00d9ff, 0 0 20px rgba(0,217,255,0.3);
+  --glow-red:   0 0 8px #ff4d4d, 0 0 20px rgba(255,77,77,0.3);
+
+  --font-display: "VT323", monospace;
+  --font-mono:    "Share Tech Mono", monospace;
+}
+
+/* ─── RESET ─────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--green);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── CRT OVERLAY LAYERS ─────────────────────────────── */
+
+/* scanlines */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.18) 2px,
+    rgba(0,0,0,0.18) 4px
+  );
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* vignette */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 60%,
+    rgba(0,0,0,0.65) 100%
+  );
+  pointer-events: none;
+  z-index: 9997;
+}
+
+/* ─── TYPOGRAPHY ─────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: 2px;
+  margin: 0;
+  line-height: 1.1;
+}
+
+p { margin: 0; }
+
+a { color: var(--cyan); text-decoration: none; }
+
+/* ─── STARS ──────────────────────────────────────────── */
+.stars {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.stars span {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 4s infinite;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.15; }
+  50%       { opacity: 0.9; }
+}
+
+/* ─── PANELS / CARDS ─────────────────────────────────── */
+.mc-panel {
+  background: rgba(11, 16, 32, 0.9);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.mc-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0,255,136,0.03) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+/* corner bracket accent */
+.mc-panel::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 12px; height: 12px;
+  border-top: 2px solid var(--green);
+  border-left: 2px solid var(--green);
+  border-radius: 2px 0 0 0;
+}
+
+.mc-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--border-dim);
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 3px;
+  color: var(--green);
+}
+
+.mc-panel-body {
+  padding: 1rem;
+}
+
+/* ─── TELEMETRY VALUE CARD ───────────────────────────── */
+.telem-card {
+  background: rgba(0,255,136,0.04);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.75rem 1rem;
+  position: relative;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.telem-card:hover {
+  border-color: rgba(0,255,136,0.5);
+  box-shadow: var(--glow-green);
+}
+
+.telem-label {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  color: rgba(0,255,136,0.55);
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
+.telem-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  color: var(--green);
+  text-shadow: var(--glow-green);
+  line-height: 1;
+}
+
+.telem-unit {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: rgba(0,255,136,0.5);
+  margin-top: 0.2rem;
+  letter-spacing: 2px;
+}
+
+/* ─── STATUS LED ─────────────────────────────────────── */
+.status-led {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+.status-led.green {
+  background: var(--green);
+  box-shadow: 0 0 6px var(--green), 0 0 12px rgba(0,255,136,0.5);
+  animation: led-blink 2s ease-in-out infinite;
+}
+
+.status-led.amber {
+  background: var(--amber);
+  box-shadow: 0 0 6px var(--amber);
+  animation: led-blink 1.2s ease-in-out infinite;
+}
+
+.status-led.red {
+  background: var(--red);
+  box-shadow: 0 0 6px var(--red);
+  animation: led-blink 0.6s ease-in-out infinite;
+}
+
+.status-led.cyan {
+  background: var(--cyan);
+  box-shadow: 0 0 6px var(--cyan);
+}
+
+@keyframes led-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.35; }
+}
+
+/* ─── GLOW UTILITIES ─────────────────────────────────── */
+.glow-green { text-shadow: var(--glow-green); color: var(--green); }
+.glow-amber { text-shadow: var(--glow-amber); color: var(--amber); }
+.glow-cyan  { text-shadow: var(--glow-cyan);  color: var(--cyan);  }
+.glow-red   { text-shadow: var(--glow-red);   color: var(--red);   }
+
+.glow { text-shadow: var(--glow-green); }
+
+/* ─── RETRO CARD (legacy alias) ──────────────────────── */
+.retro-card {
+  background: rgba(11,16,32,0.9);
+  border: 1px solid var(--border);
+  box-shadow: 0 0 10px rgba(0,255,136,0.05);
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+.card {
+  background: rgba(11,16,32,0.9);
+  border: 1px solid var(--border);
+  padding: 1rem;
+  border-radius: 4px;
+}
+
+/* ─── TERMINAL TEXT ANIMATION ────────────────────────── */
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92%       { opacity: 1; }
+  93%       { opacity: 0.4; }
+  94%       { opacity: 1; }
+  96%       { opacity: 0.6; }
+  97%       { opacity: 1; }
+}
+
+.flicker { animation: flicker 8s infinite; }
+
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.cursor::after {
+  content: "█";
+  animation: blink-cursor 1s step-end infinite;
+  color: var(--green);
+  margin-left: 2px;
+}
+
+/* ─── RADAR PULSE ────────────────────────────────────── */
+@keyframes radar-pulse {
+  0%   { transform: scale(0.8); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.radar-pulse {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid var(--green);
+  animation: radar-pulse 2s ease-out infinite;
+  pointer-events: none;
+}
+
+/* ─── SCROLLBAR ──────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--panel); }
+::-webkit-scrollbar-thumb {
+  background: rgba(0,255,136,0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(0,255,136,0.6); }
+
+/* ─── LEAFLET OVERRIDES ──────────────────────────────── */
+.leaflet-container {
+  background: #050816 !important;
+  font-family: var(--font-mono) !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(11,16,32,0.95) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--green) !important;
+  border-radius: 3px !important;
+  font-family: var(--font-mono) !important;
+}
+
+.leaflet-popup-tip { background: rgba(11,16,32,0.95) !important; }
+
+/* ─── LOADING BOOT SEQUENCE ──────────────────────────── */
+@keyframes boot-line {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+.boot-line {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: boot-line 0.4s steps(40) forwards;
+}
+
+@keyframes spin-radar {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin-radar { animation: spin-radar 2s linear infinite; }
+
+/* ─── NUMBER COUNTER TRANSITION ──────────────────────── */
+.telem-value { transition: color 0.3s; }
+
+/* ─── DIVIDER ─────────────────────────────────────────── */
+.mc-divider {
+  border: none;
+  border-top: 1px solid var(--border-dim);
+  margin: 1rem 0;
+}
+
+/* ─── SECTION LABEL ──────────────────────────────────── */
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 4px;
+  color: rgba(0,255,136,0.4);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+/* ─── PROGRESS BAR ───────────────────────────────────── */
+.mc-bar-track {
+  height: 4px;
+  background: rgba(0,255,136,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.mc-bar-fill {
+  height: 100%;
+  background: var(--green);
+  box-shadow: var(--glow-green);
+  border-radius: 2px;
+  transition: width 1s ease;
+}
