@@ -1,7 +1,3 @@
-export default function HomePage() {
-  return (
-    <main>
-      <h1>SpaceTech</h1>
-    </main>
-  );
+export default function Home() {
+  return <h1>Hello</h1>;
 }
