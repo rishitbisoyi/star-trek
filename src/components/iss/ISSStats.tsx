@@ -3,19 +3,10 @@
 import { useISS } from "@/hooks/useISS";
 
 export default function ISSStats() {
-  const data = useISS();
+  const { data } = useISS();
 
   if (!data) {
     return <p>Loading ISS Data...</p>;
-  }
-
-  if (!data.iss_position) {
-    return (
-      <div>
-        <h2>ISS Tracker</h2>
-        <p>ISS Data Unavailable</p>
-      </div>
-    );
   }
 
   return (
@@ -23,11 +14,11 @@ export default function ISSStats() {
       <h2>Live ISS Position</h2>
 
       <p>
-        Latitude: {data.iss_position.latitude}
+        Latitude: {data.latitude}
       </p>
 
       <p>
-        Longitude: {data.iss_position.longitude}
+        Longitude: {data.longitude}
       </p>
 
       <p>

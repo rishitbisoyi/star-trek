@@ -5,6 +5,10 @@ import QuickStats from "./QuickStats";
 import ISSPreview from "./ISSPreview";
 import MissionModules from "./MissionModules";
 import StarField from "@/components/retro/StarField";
+import FeaturedConstellation from "./FeaturedConstellation";
+import SpaceFactTerminal from "./SpaceFactTerminal";
+import MissionAlerts from "./MissionAlerts";
+import NightSkyPreview from "./NightSkyPreview";
 
 export default function Dashboard() {
   return (
@@ -33,7 +37,20 @@ export default function Dashboard() {
 
           <ISSPreview />
 
-          <MissionModules />
+          <FeaturedConstellation />
+
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "1rem",
+  }}
+>
+  <SpaceFactTerminal />
+  <MissionAlerts />
+</div>
+<NightSkyPreview />
+<MissionModules />
         </main>
       </div>
     </>

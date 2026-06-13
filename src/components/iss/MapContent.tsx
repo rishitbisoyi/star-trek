@@ -268,7 +268,6 @@ export default function MapContent() {
         background: "rgba(5,8,22,0.7)",
         borderTop:  "none",
         border:     "1px solid var(--border)",
-        borderTop:  "none",
         borderRadius: "0 0 4px 4px",
         fontSize:   "0.65rem",
         letterSpacing: "2px",

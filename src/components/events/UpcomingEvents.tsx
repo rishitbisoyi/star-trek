@@ -2,6 +2,7 @@
 
 import eventsData from "../../data/events.json";
 import EventCard from "./EventCard";
+import { Event } from "@/types/event";
 
 const UpcomingEvents = () => {
   return (
@@ -21,9 +22,9 @@ const UpcomingEvents = () => {
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {eventsData.map((event, i) => (
-            <EventCard key={event.id} event={event} index={i} />
-          ))}
+          {(eventsData as Event[]).map((event) => (
+  <EventCard key={event.id} event={event} />
+))}
         </div>
       )}
     </section>

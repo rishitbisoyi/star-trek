@@ -222,12 +222,12 @@ export default function CelestialEventsPage() {
             <div className="flex-1 space-y-8 overflow-y-auto pr-4">
               {/* Calendar Section */}
               <div className="animate-fade-in" style={{ animationDelay: '0.5s' }}>
-                <EventCalendar events={events} />
+                <EventCalendar />
               </div>
 
               {/* Events Section */}
               <div className="animate-fade-in" style={{ animationDelay: '0.8s' }}>
-                <UpcomingEvents events={events} />
+                <UpcomingEvents />
               </div>
 
               {/* Footer */}
