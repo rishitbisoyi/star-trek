@@ -18,14 +18,14 @@ function Typewriter({ text, speed = 35 }: { text: string; speed?: number }) {
   return <span>{displayed}</span>;
 }
 
-type PlanetId = "SUN"|"MERCURY"|"VENUS"|"EARTH"|"MARS"|"JUPITER"|"SATURN"|"URANUS"|"NEPTUNE";
+type PlanetId = "SUN"|"MERCURY"|"VENUS"|"EARTH"|"MARS"|"JUPITER"|"SATURN"|"URANUS"|"NEPTUNE"|"PLUTO";
 
 const PLANET_IMAGES: Record<PlanetId, string> = {
   SUN:"/images/planets/sun1.png", MERCURY:"/images/planets/mercury.png",
   VENUS:"/images/planets/venus.png", EARTH:"/images/planets/earth.png",
   MARS:"/images/planets/mars.png", JUPITER:"/images/planets/jupiter.png",
   SATURN:"/images/planets/saturn.png", URANUS:"/images/planets/uranus.png",
-  NEPTUNE:"/images/planets/neptune.png",
+  NEPTUNE:"/images/planets/neptune.png", PLUTO: "/images/planets/pluto.png",
 };
 
 /* Size comparison data — real radii in km */
@@ -39,6 +39,7 @@ const SIZE_DATA: { id: PlanetId; name: string; radiusKm: number; glow: string; c
   { id:"SATURN",  name:"SATURN",  radiusKm:58232,  glow:"#e8c97a" },
   { id:"URANUS",  name:"URANUS",  radiusKm:25362,  glow:"#7fffd4" },
   { id:"NEPTUNE", name:"NEPTUNE", radiusKm:24622,  glow:"#4169e1" },
+  {id: "PLUTO",   name: "PLUTO",  radiusKm: 1188,  glow: "#d6c6a5"},
 ];
 
 const SCALE_REF = 69911; // Jupiter's radius = reference
@@ -213,6 +214,23 @@ const PLANET_INFO: Record<PlanetId, PlanetInfo> = {
     ],
     wiki:"https://en.wikipedia.org/wiki/Neptune",
   },
+  PLUTO: {
+  title: "PLUTO",
+  stats: [
+    { label: "TYPE", value: "DWARF PLANET" },
+    { label: "DISTANCE FROM SUN", value: "5,906,000,000 KM (39.5 AU)" },
+    { label: "RADIUS", value: "1,188 KM" },
+    { label: "MOONS", value: "5 (CHARON, STYX, NIX, KERBEROS, HYDRA)" },
+    { label: "ORBIT PERIOD", value: "248 EARTH YEARS" },
+    { label: "AGE", value: "~4.5 BILLION YEARS" },
+  ],
+  facts: [
+    "Pluto was discovered in 1930 and was considered the ninth planet until 2006.",
+    "Pluto and its largest moon Charon orbit a point outside Pluto itself, making them almost a binary system.",
+    "A year on Pluto lasts 248 Earth years, so it has not completed one full orbit since its discovery.",
+  ],
+  wiki: "https://en.wikipedia.org/wiki/Pluto",
+},
 };
 
 export default function PlanetsPage() {
@@ -247,12 +265,12 @@ export default function PlanetsPage() {
 
   // Asteroid belt — 200 rocks between Mars and Jupiter orbit radii (178–208px)
   useEffect(() => {
-    setAsteroids(Array.from({ length: 200 }, (_, i) => ({
+    setAsteroids(Array.from({ length: 360 }, (_, i) => ({
       id:       i,
-      angle:    (i / 200) * 360 + Math.random() * 4 - 2,
+      angle:    (i / 360) * 360 + Math.random() * 4 - 2,
       radius:   178 + Math.random() * 30,
       size:     1 + Math.random() * 1.8,
-      opacity:  0.15 + Math.random() * 0.55,
+      opacity:  0.30 + Math.random() * 0.75,
       delay:    Math.random() * 10,
       duration: 3 + Math.random() * 6,
     })));
@@ -409,6 +427,15 @@ export default function PlanetsPage() {
         <button className={styles.neptune} onClick={e => handleScan("NEPTUNE", e)}>
           <img src="/images/planets/neptune.png" alt="Neptune" />
           <span className={styles.tooltip}>NEPTUNE</span>
+        </button>
+      </div>
+      <div className={styles.plutoOrbit}>
+        <button
+          className={styles.pluto}
+          onClick={(e) => handleScan("PLUTO", e)}
+        >
+          <img src="/images/planets/pluto.png" alt="Pluto" />
+          <span className={styles.tooltip}>PLUTO</span>
         </button>
       </div>
 
